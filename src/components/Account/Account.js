@@ -5,7 +5,6 @@ import RaisedButton from "material-ui/RaisedButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 import axios from 'axios';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 export default class Account extends Component {
 
@@ -13,13 +12,19 @@ export default class Account extends Component {
         super(props);
         this.state = {
             'user':[],
+            'userID':'14'
         };
 
     };
 
+    // store.subscribe(){
+    //     this.state.userID = store.getState();
+    // };
+
+
     componentDidMount(){
         const self = this;
-        axios.get("http://crossroads.web.engr.illinois.edu/api/user/14/")
+        axios.get("http://crossroads.web.engr.illinois.edu/api/user/" + this.state.userID + "/")
         .then(function (response) {
             console.log(response.data);
             self.setState((state) => ({ 
@@ -54,8 +59,11 @@ export default class Account extends Component {
                 <Nav/>
                 <div className="content-projects">
                     <h2>projects</h2>
+                    {this.state.userID}
                     <div className="acct">
                         {this.showUser()}
+
+
                     </div>
                 </div>
             </div>

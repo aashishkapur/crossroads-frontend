@@ -26,10 +26,9 @@ export default class Projects extends Component {
         {
             axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
             .then(function (response) {
-              console.log(response.data);
-              for (var i = 0; i < 100/*response.data.length*/; i++){
-                              console.log(response.data[i]);
-
+              // console.log(response.data);
+              for (var i = 0; i < response.data.length; i++){
+                    // console.log(response.data[i]);
                     self.setState((state) => ({ 
                             projData: state.projData.concat({
                                 'name':response.data[i]['name'], 
@@ -39,7 +38,8 @@ export default class Projects extends Component {
                             })
                     }));
               }
-              console.log(self.state.projData);
+              console.log("done!");
+              // console.log(self.state.projData);
             });
         }
         else
@@ -58,7 +58,7 @@ export default class Projects extends Component {
                             })
                     }));
               });
-              console.log(self.state.projData);
+              // console.log(self.state.projData);
 
         }
 
@@ -70,7 +70,7 @@ export default class Projects extends Component {
         // return (<div>{this.state.projData.length}<br/>{this.state.projData[0].id.toString()}</div>);
         return this.state.projData.map((c) => {
             return (
-                <TableRow key={c.Project_id}>
+                <TableRow key={c.id}>
                     <TableRowColumn>{c.id}</TableRowColumn>
                     <TableRowColumn>{c.name}</TableRowColumn>
                     <TableRowColumn>{c.language}</TableRowColumn>
@@ -84,9 +84,9 @@ export default class Projects extends Component {
 
 
     render() {
-        console.log(this.state.individual);
+        // console.log(this.state.individual);
         let content =                         <Table>
-                            <TableHeader adjustForCheckbox={false}>
+                            <TableHeader displayRowCheckbox={false}>
                                 <TableRow>
                                     <TableHeaderColumn>Project ID</TableHeaderColumn>
                                     <TableHeaderColumn>Project Name</TableHeaderColumn>
@@ -98,10 +98,11 @@ export default class Projects extends Component {
                                                     {this.showProjects()}
                             </TableBody>
                         </Table>;
+        let title = <h2>Projects</h2>;
         if(this.state.individual)
         {
             console.dir(this.state.projData);
-            content = <div>
+            content = <div className = "projectDetail">
                 <Card>
                     <CardHeader
                       title={this.state.projData[0].name}
@@ -113,14 +114,15 @@ export default class Projects extends Component {
                     </CardText>
 
                 </Card>
-            </div>
+            </div>;
+            title = <h2>Project Detail</h2>;
         }
 
         return (
             <div>
                 <Nav/>
                 <div className="content-projects">
-                    <h2>projects</h2>
+                    {title}
                     <div className="projects-list">
                         {content}
                     </div>

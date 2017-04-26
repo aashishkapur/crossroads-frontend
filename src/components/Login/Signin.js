@@ -10,6 +10,7 @@ import TextField from "material-ui/TextField";
 import {Link} from "react-router-dom";
 import axios from 'axios';
 import { browserHistory } from 'react-router'
+// import addID from "../../actions";
 
 class Signin extends Component {
     
@@ -38,6 +39,7 @@ class Signin extends Component {
           })
           .then(function (response) {
             console.log(response.data.userId);
+            // store.dispatch(addID(response.data.userId));
             window.location.href = "/account";
             // window.location.replace("http://stackoverflow.com");
           })
