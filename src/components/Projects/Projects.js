@@ -141,7 +141,7 @@ export default class Projects extends Component {
         if(this.state.individual)
         {
             console.log("disp indiv");
-            console.dir(this.state.projData);
+            console.dir(this.state.projData[0].name);
             content = <div className="projectDetail">
                         <Card className="projCard">
                             <CardTitle
@@ -160,7 +160,7 @@ export default class Projects extends Component {
                     </div>;
             title = <h2>Project Detail</h2>;
         }
-        console.dir(this.state.tagData);
+        // console.dir(this.state.tagData);
         return (
             <div>
                 <Nav/>
