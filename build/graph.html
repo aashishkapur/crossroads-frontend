@@ -1,0 +1,203 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Similar Projects</title>
+  <style>
+.node  {
+  fill: #aaa;
+  stroke: #fff;
+  stroke-width: 3px;
+}
+
+.link  {
+  stroke: #777;
+  stroke-opacity: 0.1;
+  stroke-width: 2px;
+}
+  </style>
+</head>
+<body>
+  <script src='http://d3js.org/d3.v3.min.js'></script>
+  <script>
+var width = window.innerWidth,
+    height = window.innerHeight;
+
+var nodes;
+var links;
+var locked = window.location.hash != "";
+var pid = parseInt(window.location.hash.substr(1));
+d3.json("http://crossroads.web.engr.illinois.edu/api/graph/similarprojects/", function(data){
+  console.log(data);
+  nodes = data["Nodes"];
+  links = data["Edges"];
+  for(var i = 0; i < links.length; i++)
+  {
+    links[i].source = parseInt(links[i].source)-1;
+    links[i].target = parseInt(links[i].target)-1;
+    links[i].weight = parseInt(links[i].weight);
+  }
+  set_up();
+});
+
+var svg = d3.select('body').append('svg')
+  .attr('width', width)
+  .attr('height', height);
+
+function set_up(){
+var force = d3.layout.force()
+  .size([width, height])
+  .nodes(nodes)
+  .links(links);
+
+force.linkDistance(width/4);
+
+var link = svg.selectAll('.link')
+  .data(links)
+  .enter().append('line')
+  .attr('class', 'link');
+
+var node = svg.selectAll('.node')
+  .data(nodes)
+  .enter().append('circle')
+  .attr('class', 'node')
+  .attr('id', function(d) { return d.id; });
+// On node hover, examine the links to see if their
+// source or target properties match the hovered node.
+if(!locked){
+node.on('mouseover', function(d) {
+  node.style("fill", function(d2){
+  return d.id == d2.id ? "#ccc" : "#aaa";
+  });
+  node.style("stroke", function(d2){
+  return d.id == d2.id ? "#888" : "#fff";
+  });
+  document.getElementById("info").innerText = d.name;
+  link.style('stroke-opacity', function(l) {
+    if (d === l.source || d === l.target)
+      return 1;
+    else
+      return 0.01; 
+    });
+  link.style('stroke', function(l) {
+    if (d === l.source || d === l.target)
+      return "#c39";
+    else
+      return "#777"; 
+    });
+  link.style('stroke-width', function(l) {
+    if (d === l.source || d === l.target)
+      return 4;
+    else
+      return 2;
+    });
+});
+
+node.on('click', function(d){
+  window.location = "http://crossroads.web.engr.illinois.edu/projects?p=" + d.id;
+});
+
+// Set the stroke width back to normal when mouse leaves the node.
+node.on('mouseout', function() {
+  node.style("fill", "#aaa");
+  node.style("stroke", "#fff");
+  link.style('stroke-width', 2);
+  link.style('stroke-opacity', 0.1);
+  link.style('stroke', 0.1);
+});
+}else{
+  var sd;
+  node.filter(function(d) { if( d.id == pid){sd = d; return true;}else{return false;} });
+  node.style("fill", function(d2){
+  return pid == d2.id ? "#ccc" : "#aaa";
+  });
+  node.style("stroke", function(d2){
+  return pid == d2.id ? "#888" : "#fff";
+  });
+  document.getElementById("info").innerText = sd.name;
+  var seperator = document.createElement("p");
+  seperator.innerText = "Projects With Similar Tags";
+  document.getElementById("info").appendChild(seperator);
+  link.style('stroke-opacity', function(l) {
+    if (sd.id == l.source + 1 || sd.id == l.target + 1)
+      return 1;
+    else
+      return 0.01; 
+    });
+  link.style('stroke', function(l) {
+    if (sd.id == l.source + 1 || sd.id == l.target + 1)
+      return "#c39";
+    else
+      return "#777"; 
+    });
+  link.style('stroke-width', function(l) {
+    if (sd.id == l.source + 1 || sd.id == l.target + 1)
+      return 4;
+    else
+      return 2;
+    });
+   link.each(function(l){
+        var ends = [];
+  if(l.source + 1 == sd.id){
+    if(ends.indexOf(l.target) == -1){
+      ends.push(l.target);
+    }else{ return; }
+    var child = document.createElement("a");
+    child.innerText = nodes[l.target].name;
+    child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.target].id;
+    document.getElementById("info").appendChild(child);
+    document.getElementById("info").appendChild(document.createElement("br"));
+  }
+  if(l.target + 1 == sd.id){
+    if(ends.indexOf(l.source) == -1){
+      ends.push(l.source);
+    }else{ return; }
+    var child = document.createElement("a");
+    child.innerText = nodes[l.source].name;
+    child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.source].id;
+    document.getElementById("info").appendChild(child);
+    document.getElementById("info").appendChild(document.createElement("br"));
+  }
+   });
+}
+
+
+force.on('end', function() {
+
+    // When this function executes, the force layout
+    // calculations have concluded. The layout will
+    // have set various properties in our nodes and
+    // links objects that we can use to position them
+    // within the SVG container.
+
+    // First let's reposition the nodes. As the force
+    // layout runs it updates the `x` and `y` properties
+    // that define where the node should be centered.
+    // To move the node, we set the appropriate SVG
+    // attributes to their new values. We also have to
+    // give the node a non-zero radius so that it's visible
+    // in the container.
+
+    node.attr('r', width/120)
+        .attr('cx', function(d) { return d.x; })
+        .attr('cy', function(d) { return d.y; });
+
+    // We also need to update positions of the links.
+    // For those elements, the force layout sets the
+    // `source` and `target` properties, specifying
+    // `x` and `y` values in each case.
+
+    link.attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+
+});
+force.start();
+};
+  </script>
+    <nav class="navbar navbar-default home-navbar" style="position: absolute; top:0; left:0; width:100%; background: rgb(3, 169, 244); margin-bottom: 0px; border: none; border-radius: 0px; font-family: sans-serif; padding: 2px; line-height: 2em;"><div class="container-fluid"><a class="navbar-brand" href="/" style="color: black; text-decoration: none; font-size: 22px; font-weight: bold; margin-left: 0.75em;">Crossroads</a><a class="navbar-brand" href="/projects" style="color: black; text-decoration: none; margin-left: 1.25em;">Projects</a><a class="navbar-brand" href="/graph.html" style="color: black; text-decoration: none; margin-left: 1.25em;">Graphs</a><input style="float: right;"></div></nav>
+
+<div style="position:absolute; left:40; bottom:60; font-family:'Arial';" id="info">
+</div>
+</body>
+</html>
