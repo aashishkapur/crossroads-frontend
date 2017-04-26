@@ -19,7 +19,7 @@ export default class Projects extends Component {
 
     componentDidMount(){
         const self = this;
-        axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
+        axios.get("https://crossroads.web.engr.illinois.edu/api/projects/")
         .then(function (response) {
           console.log(response.data[0]['Project_name']);
           for (var i = 0; i < 100/*response.data.length*/; i++){
@@ -51,8 +51,6 @@ export default class Projects extends Component {
             );
             // return (<div key={c.Project_id}>{c.Project_id}: {c.Project_name}</div>);
         });
-       
-
     }
 
 

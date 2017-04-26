@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Nav from "../Nav";
-import "./projects.css";
+// import "./projects.css";
 import RaisedButton from "material-ui/RaisedButton";
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
@@ -12,46 +12,41 @@ export default class Account extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            'projData':[],
+            'user':[],
         };
 
     };
 
     componentDidMount(){
         const self = this;
-        axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
+        axios.get("http://crossroads.web.engr.illinois.edu/api/user/14/")
         .then(function (response) {
-          console.log(response.data[0]['Project_name']);
-          for (var i = 0; i < 100/*response.data.length*/; i++){
-                self.setState((state) => ({ 
-                        projData: state.projData.concat({
-                            'Project_id':response.data[i]['Project_id'], 
-                            'Project_name': response.data[i]['Project_name']
-
-                        })
-                }));
-          }
-          console.log(self.state.projData);
+            console.log(response.data);
+            self.setState((state) => ({ 
+                    user: {
+                        'user_name':response.data['user_name'], 
+                        'employer':response.data['employer'], 
+                        'email':response.data['email'], 
+                        'tags': response.data['tags']
+                    } }));
+            console.log(self.state.user);
         });
+                    console.log(self.state.user);
+
     };
 
-    showProjects = () => {
+    showUser = () => {
         // console.log(this.state.projData);
         // return (<div>{this.state.projData.length}<br/>{this.state.projData[0].id.toString()}</div>);
-        return this.state.projData.map((c) => {
             return (
-                <TableRow key={c.Project_id}>
-                    <TableRowColumn>{c.Project_id}</TableRowColumn>
-                    <TableRowColumn>{c.Project_name}</TableRowColumn>
-                </TableRow>
+                <div key={"hello"}>
+                    <p>Hello, {this.state.user.user_name}!</p>
+                    <p>Email: {this.state.user.email}</p>
+                    <p>Employer: {this.state.user.employer}</p>
+                </div>
             );
             // return (<div key={c.Project_id}>{c.Project_id}: {c.Project_name}</div>);
-        });
-       
-
     }
-
-
 
     render() {
         return (
@@ -59,33 +54,12 @@ export default class Account extends Component {
                 <Nav/>
                 <div className="content-projects">
                     <h2>projects</h2>
-                    <div className="projects-list">
-                        <Table>
-                            <TableHeader adjustForCheckbox={false}>
-                                <TableRow>
-                                    <TableHeaderColumn>Project ID</TableHeaderColumn>
-                                    <TableHeaderColumn>Project Name</TableHeaderColumn>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody displayRowCheckbox={false}>
-                                {this.showProjects()}
-                            </TableBody>
-                        </Table>
+                    <div className="acct">
+                        {this.showUser()}
                     </div>
                 </div>
             </div>
         );
     }
 }
-
-                        // <Card>
-                        //     <CardHeader title="Python Project!"/>
-                        //     <CardText className="project-desc">
-                        //         <img className="project-image" alt="proj-img" style={{height:'200px','maxWidth':'300px'}} src="https://dummyimage.com/300x200/000/fff.png"/>
-                        //         <div className="project-info line-left">
-                        //             <p>hello</p>
-                        //         </div>
-                        //     </CardText>
-
-                        // </Card>
 
