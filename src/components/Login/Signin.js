@@ -38,7 +38,7 @@ class Signin extends Component {
           })
           .then(function (response) {
             console.log(response.data.userId);
-            window.location.href = "http://localhost:3000/projects";
+            window.location.href = "/account";
             // window.location.replace("http://stackoverflow.com");
           })
           .catch(function (error) {
