@@ -13,28 +13,56 @@ export default class Projects extends Component {
         super(props);
         this.state = {
             'projData':[],
+            'individual':false
         };
 
     };
 
     componentDidMount(){
         const self = this;
-        axios.get("https://crossroads.web.engr.illinois.edu/api/projects/")
-        .then(function (response) {
-          console.log(response.data[0]['Project_name']);
-          for (var i = 0; i < 100/*response.data.length*/; i++){
-                self.setState((state) => ({ 
-                        projData: state.projData.concat({
-                            'name':response.data[i]['name'], 
-                            'language':response.data[i]['language'], 
-                            'description':response.data[i]['description'], 
-                            'id': response.data[i]['id']
+        console.log("----------------------------");
+        console.log(this.props.location.search.substr(3));
+        if(this.props.location.search.substr(3) == "")
+        {
+            axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
+            .then(function (response) {
+              console.log(response.data);
+              for (var i = 0; i < 100/*response.data.length*/; i++){
+                              console.log(response.data[i]);
 
-                        })
-                }));
-          }
-          console.log(self.state.projData);
-        });
+                    self.setState((state) => ({ 
+                            projData: state.projData.concat({
+                                'name':response.data[i]['name'], 
+                                'language':response.data[i]['language'], 
+                                'description':response.data[i]['description'], 
+                                'id': response.data[i]['id']
+                            })
+                    }));
+              }
+              console.log(self.state.projData);
+            });
+        }
+        else
+        {
+            self.setState((state) => ({individual: true}));
+            axios.get("http://crossroads.web.engr.illinois.edu/api/project/" + this.props.location.search.substr(3) + "/")
+            .then(function (response) {
+                    self.setState((state) => ({ 
+                            projData: state.projData.concat({
+                                'name':response.data['name'], 
+                                'language':response.data['language'], 
+                                'description':response.data['description'], 
+                                'id': response.data['id'],
+                                'repositoryURL': response.data['repositoryURL'],
+                                'license': response.data['license'],
+                            })
+                    }));
+              });
+              console.log(self.state.projData);
+
+        }
+
+
     };
 
     showProjects = () => {
@@ -56,13 +84,8 @@ export default class Projects extends Component {
 
 
     render() {
-        return (
-            <div>
-                <Nav/>
-                <div className="content-projects">
-                    <h2>projects</h2>
-                    <div className="projects-list">
-                        <Table>
+        console.log(this.state.individual);
+        let content =                         <Table>
                             <TableHeader adjustForCheckbox={false}>
                                 <TableRow>
                                     <TableHeaderColumn>Project ID</TableHeaderColumn>
@@ -71,10 +94,35 @@ export default class Projects extends Component {
                                     <TableHeaderColumn>Project Description</TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody             displayRowCheckbox={false}>
+                            <TableBody displayRowCheckbox={false}>
                                                     {this.showProjects()}
                             </TableBody>
-                        </Table>
+                        </Table>;
+        if(this.state.individual)
+        {
+            console.dir(this.state.projData);
+            content = <div>
+                <Card>
+                    <CardHeader
+                      title={this.state.projData[0].name}
+                      subtitle={this.state.projData[0].description}
+                    />
+                    <CardText>
+                        Language: {this.state.projData[0].language}<br/>
+                        License:{this.state.projData[0].license}
+                    </CardText>
+
+                </Card>
+            </div>
+        }
+
+        return (
+            <div>
+                <Nav/>
+                <div className="content-projects">
+                    <h2>projects</h2>
+                    <div className="projects-list">
+                        {content}
                     </div>
                 </div>
             </div>

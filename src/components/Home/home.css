@@ -9,5 +9,18 @@
 
 .content-home{
 	/*background-color:gray;*/
-	background-image: url('/background.png');
+	background-image: url('http://askapur2.web.engr.illinois.edu/background.png');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+}
+
+.overlay{
+	background-color: rgba(0,0,0,.4);
+	color:white;
+	/*opacity: 0.9;*/
 }

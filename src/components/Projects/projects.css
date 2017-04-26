@@ -23,7 +23,7 @@
 
 .projects-list{
 	max-width: 720px;
-	background-color:brown;
+	/*background-color:brown;*/
 	display: flex;
 	align-items: center;
 }

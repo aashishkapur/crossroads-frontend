@@ -17,9 +17,8 @@ function todos(state = [], action) {
   }
 }
 
-const todoApp = combineReducers({
-  visibilityFilter,
+const xRoadReducer = combineReducers({
   todos
-})
+});
 
-export default todoApp;
+export default xRoadReducer;
