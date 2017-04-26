@@ -67,7 +67,10 @@ export default class MakeProject extends Component {
           .then(function (response) {
             // console.dir(response.data);
             // alert(response.data.projectId);
-            window.location.href = "/projects?p=" + response.data.projectId;
+            if(response.data.projectId)
+              window.location.href = "/projects?p=" + response.data.projectId;
+            else
+              alert("Not a valid URL, please try again or contact tech support");
           })
           .catch(function (error) {
             console.log(error);
