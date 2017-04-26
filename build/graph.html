@@ -93,7 +93,8 @@ node.on('mouseover', function(d) {
 });
 
 node.on('click', function(d){
-  window.location = "http://crossroads.web.engr.illinois.edu/projects?p=" + d.id;
+    window.location = "/projects?p=" + d.id;
+  // window.location = "http://ask.web.engr.illinois.edu/projects?p=" + d.id;
 });
 
 // Set the stroke width back to normal when mouse leaves the node.
@@ -143,7 +144,8 @@ node.on('mouseout', function() {
     }else{ return; }
     var child = document.createElement("a");
     child.innerText = nodes[l.target].name;
-    child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.target].id;
+    child.href = "/projects?p="+nodes[l.target].id;
+    // child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.target].id;
     document.getElementById("info").appendChild(child);
     document.getElementById("info").appendChild(document.createElement("br"));
   }
@@ -153,7 +155,8 @@ node.on('mouseout', function() {
     }else{ return; }
     var child = document.createElement("a");
     child.innerText = nodes[l.source].name;
-    child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.source].id;
+    // child.href = "http://crossroads.web.engr.illinois.edu/projects?p="+nodes[l.source].id;
+    child.href = "/projects?p="+nodes[l.source].id;
     document.getElementById("info").appendChild(child);
     document.getElementById("info").appendChild(document.createElement("br"));
   }

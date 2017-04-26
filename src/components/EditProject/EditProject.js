@@ -66,6 +66,7 @@ export default class MakeProject extends Component {
     editProject(e){
         console.log("email: " + this.state.email + "\t password: " + this.state.password);
         e.preventDefault();
+        const self = this;
         axios.post('http://crossroads.web.engr.illinois.edu/api/project/'+ this.props.location.search.substr(3) + "/", 
           {
             repositoryURL:this.state.repositoryURL,
@@ -79,7 +80,7 @@ export default class MakeProject extends Component {
           })
           .then(function (response) {
             console.log(response.data.id);
-            window.location.href = "/projects?p=" + response.data.id;
+            window.location.href = "/projects?p=" + self.state.id;
           })
           .catch(function (error) {
             console.log(error);

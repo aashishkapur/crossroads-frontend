@@ -121,7 +121,7 @@ export default class Projects extends Component {
     };
     editProject = (e) => {
         e.preventDefault();
-        window.location.href = "/submitProject";
+        window.location.href = "/editProject?p=" + this.state.projData[0].id;
     };
 
 
@@ -152,12 +152,13 @@ export default class Projects extends Component {
         if(this.state.individual)
         {
             console.log("disp indiv");
-            // console.dir(this.state.projData[0].name);
+            console.dir(this.state.projData);
+            let titleWLink = <a style={{'color':'black','textDecoration':'none'}} href={this.state.projData[0].repositoryURL}>{this.state.projData[0].name}</a>
             content = <div className="projectDetail">
                         <Card className="projCard">
                             <CardHeader>
                             <CardTitle
-                              title={this.state.projData[0].name }
+                              title={titleWLink}
                               subtitle={this.state.projData[0].description}
                             />
                             </CardHeader>
@@ -173,7 +174,7 @@ export default class Projects extends Component {
             title = <div><h2>Project Detail</h2> </div>;
 
             button =    <div class="row-proj" style={{'marginTop':'1em'}}>
-                           <RaisedButton stype={{'marginLeft':'.5em'}}primary={true} label="Edit Project"/>
+                           <RaisedButton stype={{'marginLeft':'.5em'}}primary={true} label="Edit Project" onClick={this.editProject}/>
                            <RaisedButton primary={true} label="View Graph" onClick={this.toGraph}/>
                         </div>;
 

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Nav from "../Nav";
-import {Card, CardHeader, CardText} from 'material-ui/Card';
+import {Card, CardHeader, CardText, CardTitle} from 'material-ui/Card';
 // import {FlatButton} from 'material-ui/FlatButton';
 import RaisedButton from "material-ui/RaisedButton";
 // import DatePicker from 'material-ui/DatePicker';
@@ -23,7 +23,8 @@ export default class MakeProject extends Component {
             sponsorOrg: '', 
             license: '', 
             name: '', 
-            userID: '14'
+            userID: '14',
+            ghURL:''
         };
         this.submitProject = this.submitProject.bind(this);
     };
@@ -51,6 +52,22 @@ export default class MakeProject extends Component {
           .then(function (response) {
             console.log(response.data.id);
             window.location.href = "/projects?p=" + response.data.id;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    };
+
+    submitRepo = (e) => {
+        e.preventDefault();
+        axios.put('http://crossroads.web.engr.illinois.edu/api/import/', 
+          {
+            url:this.state.ghURL,
+          })
+          .then(function (response) {
+            // console.dir(response.data);
+            // alert(response.data.projectId);
+            window.location.href = "/projects?p=" + response.data.projectId;
           })
           .catch(function (error) {
             console.log(error);
@@ -115,18 +132,23 @@ export default class MakeProject extends Component {
                             <RaisedButton label="Submit!" primary={true} onClick={this.submitProject} style={{width:'100%'}}/>
                         </CardText>
                     </Card>
-                    <p>This is login</p>
+                    
+                    <Card style={{margin:'2em auto'}}>
+                        <CardTitle title="Import an Existing Repo!" style={{'paddingBottom':'0px'}}/>
+                        <CardText style={{'paddingTop':'1px'}}>
+                            <TextField
+                              id="text-field-default"
+                              floatingLabelText="Repository Link"
+                              onChange={this.handleChange.bind(this, 'ghURL')}
+                            />
+                            <br/>
+
+                            <RaisedButton label="Submit" primary={true} onClick={this.submitRepo} style={{width:'100%'}}/>
+                        </CardText>
+                    </Card>
 
                 </div>
             </div>
         );
     }
 }
-
-
-                            // <DatePicker 
-                                // hintText="Creation Date"
-                            //     onChange={this.handleChange.bind(this, 'creationDate')}
-                            // />
-
-
