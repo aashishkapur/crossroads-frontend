@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import Nav from "../Nav";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import {FlatButton} from 'material-ui/FlatButton';
+import {Card, CardHeader, CardText} from 'material-ui/Card';
+// import {FlatButton} from 'material-ui/FlatButton';
 import RaisedButton from "material-ui/RaisedButton";
-import DatePicker from 'material-ui/DatePicker';
+// import DatePicker from 'material-ui/DatePicker';
 
 import TextField from "material-ui/TextField";
 import Toggle from 'material-ui/Toggle';
 
-import {Link} from "react-router-dom";
+// import {Link} from "react-router-dom";
 import axios from 'axios';
 
 export default class MakeProject extends Component {
@@ -37,7 +37,7 @@ export default class MakeProject extends Component {
     submitProject(e){
         console.log("email: " + this.state.email + "\t password: " + this.state.password);
         e.preventDefault();
-        const self = this;
+        // const self = this;
 
         axios.put('http://crossroads.web.engr.illinois.edu/api/project/', 
           {
@@ -52,7 +52,8 @@ export default class MakeProject extends Component {
           })
           .then(function (response) {
             console.log(response.data.id);
-            window.location.href = "/project?p=" + response.data.id;
+            alert(response.data.id);
+            window.location.href = "/projects?p=" + response.data.id;
           })
           .catch(function (error) {
             console.log(error);

@@ -13,10 +13,17 @@ const style = {
     },
     navText: {
         color: 'black',
-        'textDecoration': 'none'
-
-        // fontFamily: 'anton'
+        'textDecoration': 'none',
+        'fontSize':'22px',
+        'fontWeight':'bold',
+        'marginLeft':'.75em'
     },
+    navLink: {
+        color: 'black',
+        'textDecoration': 'none',
+        'marginLeft':'1.25em'
+    },
+
     input:{
         float: 'right',
     }
@@ -28,6 +35,7 @@ export default class Nav extends Component {
             <nav className="navbar navbar-default home-navbar" style={style.nav}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/" style={style.navText}>Crossroads</a>
+                    <a className="navbar-brand" href="/projects" style={style.navLink}>Projects</a>
                     <input  style={style.input}/>
                 </div>
 

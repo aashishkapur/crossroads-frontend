@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import Nav from "../Nav";
 // import "./projects.css";
 import RaisedButton from "material-ui/RaisedButton";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+// import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 import axios from 'axios';
 
@@ -40,14 +41,41 @@ export default class Account extends Component {
 
     };
 
+    toProj = (rowNumber, columnNumber, evt) =>{
+        window.location.href = "/projects?p=" + (rowNumber + 1);
+    };
+    redirectMake = (e) => {
+        e.preventDefault();
+        window.location.href = "/submitProject";
+    };
+
     showUser = () => {
         // console.log(this.state.projData);
         // return (<div>{this.state.projData.length}<br/>{this.state.projData[0].id.toString()}</div>);
-            return (
-                <div key={"hello"}>
-                    <p>Hello, {this.state.user.user_name}!</p>
-                    <p>Email: {this.state.user.email}</p>
-                    <p>Employer: {this.state.user.employer}</p>
+            return (<div style={{'display':'flex', 'justifyContent':'center'}}>
+                <div style={{'width':"60%", }}>
+                        <Table onCellClick={this.toProj}>
+                            <TableHeader 
+                                displayRowCheckbox={false}
+                                displaySelectAll={false}
+                                adjustForCheckbox={false}>
+                                <TableRow>
+                                    <TableHeaderColumn>Project ID</TableHeaderColumn>
+                                    <TableHeaderColumn>Project Name</TableHeaderColumn>
+                                    <TableHeaderColumn>Project language</TableHeaderColumn>
+                                    <TableHeaderColumn>Project Description</TableHeaderColumn>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody displayRowCheckbox={false}>
+                                <RaisedButton 
+                                    label="Submit A Project!"
+                                    primary={true}
+                                    fullWidth={true}
+                                    onClick={this.redirectMake}/>
+                            </TableBody>
+                        </Table>
+                </div>
+
                 </div>
             );
             // return (<div key={c.Project_id}>{c.Project_id}: {c.Project_name}</div>);
@@ -57,13 +85,16 @@ export default class Account extends Component {
         return (
             <div>
                 <Nav/>
-                <div className="content-projects">
-                    <h2>projects</h2>
-                    {this.state.userID}
+                <div className="content-account">
+                    <h2 style={{textAlign: 'center'}}>Your Account!</h2>
                     <div className="acct">
+                                    <div key={"hello"} style={{'textAlign':'right', 'marginRight':'5em'}}>
+                    <p>Hello, {this.state.user.user_name}!<br/>
+                    Email: {this.state.user.email}<br/>
+                    Employer: {this.state.user.employer}</p>
+                </div>
+
                         {this.showUser()}
-
-
                     </div>
                 </div>
             </div>

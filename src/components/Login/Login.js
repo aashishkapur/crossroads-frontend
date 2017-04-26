@@ -10,14 +10,14 @@ import "./login.css";
 
 // import {Link} from "react-router-dom";
 
-import  {connect} from 'react-redux';
+// import  {connect} from 'react-redux';
 
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
         
-    };
+    // };
 
 
     render() {

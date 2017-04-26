@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import Nav from "../Nav";
 import "./projects.css";
-import RaisedButton from "material-ui/RaisedButton";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-
+// import RaisedButton from "material-ui/RaisedButton";
+import {Card, CardTitle, CardText} from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
 import axios from 'axios';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
@@ -13,31 +13,36 @@ export default class Projects extends Component {
         super(props);
         this.state = {
             'projData':[],
-            'individual':false
+            'individual':false,
+            'tagData':[]
         };
 
     };
 
     componentDidMount(){
         const self = this;
-        console.log("----------------------------");
-        console.log(this.props.location.search.substr(3));
-        if(this.props.location.search.substr(3) == "")
+        // console.log("----------------------------");
+        // console.log(this.props.location.search.substr(3));
+        if(this.props.location.search.substr(3) === "")
         {
             axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
             .then(function (response) {
               // console.log(response.data);
+              var arr1 = []
               for (var i = 0; i < response.data.length; i++){
                     // console.log(response.data[i]);
-                    self.setState((state) => ({ 
-                            projData: state.projData.concat({
+                    arr1.push({
                                 'name':response.data[i]['name'], 
                                 'language':response.data[i]['language'], 
                                 'description':response.data[i]['description'], 
                                 'id': response.data[i]['id']
-                            })
-                    }));
+                            });
               }
+                
+                self.setState((state) => ({ 
+                            projData: state.projData.concat(arr1)
+                }));
+
               console.log("done!");
               // console.log(self.state.projData);
             });
@@ -47,7 +52,24 @@ export default class Projects extends Component {
             self.setState((state) => ({individual: true}));
             axios.get("http://crossroads.web.engr.illinois.edu/api/project/" + this.props.location.search.substr(3) + "/")
             .then(function (response) {
+                    // console.dir(response.data);
+                    // console.dir(response.data.tags);
+                    
+                    var arr1 = [];
+                    for(var i = 0; i < response.data.tags.length;i++)
+                    {
+                        console.log("\t===========name: " + response.data.tags[i]['name']);
+                        arr1.push({
+                                    'key': i,
+                                    'label':response.data.tags[i]['name'],
+                                });
+                    }
+                    console.log("arr1");
+                    console.dir(arr1);
+
                     self.setState((state) => ({ 
+                            tagData: state.tagData.concat(arr1),
+
                             projData: state.projData.concat({
                                 'name':response.data['name'], 
                                 'language':response.data['language'], 
@@ -58,12 +80,19 @@ export default class Projects extends Component {
                             })
                     }));
               });
-              // console.log(self.state.projData);
-
         }
-
-
     };
+
+    renderChip(data) {
+        return (
+            <Chip
+                key={data.key}
+                style={{margin:4}}
+            >
+                {data.label}
+            </Chip>
+        );
+    }
 
     showProjects = () => {
         // console.log(this.state.projData);
@@ -81,12 +110,19 @@ export default class Projects extends Component {
         });
     }
 
+    toProj = (rowNumber, columnNumber, evt) =>{
+        window.location.href = "/projects?p=" + (rowNumber + 1);
+    };
+
 
 
     render() {
         // console.log(this.state.individual);
-        let content =                         <Table>
-                            <TableHeader displayRowCheckbox={false}>
+        let content =   <Table onCellClick={this.toProj}>
+                            <TableHeader 
+                                displayRowCheckbox={false}
+                                displaySelectAll={false}
+                                adjustForCheckbox={false}>
                                 <TableRow>
                                     <TableHeaderColumn>Project ID</TableHeaderColumn>
                                     <TableHeaderColumn>Project Name</TableHeaderColumn>
@@ -94,30 +130,37 @@ export default class Projects extends Component {
                                     <TableHeaderColumn>Project Description</TableHeaderColumn>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody displayRowCheckbox={false}>
-                                                    {this.showProjects()}
+                            <TableBody 
+                                displayRowCheckbox={false}
+                            >
+                                {this.showProjects()}
                             </TableBody>
                         </Table>;
+
         let title = <h2>Projects</h2>;
         if(this.state.individual)
         {
+            console.log("disp indiv");
             console.dir(this.state.projData);
-            content = <div className = "projectDetail">
-                <Card>
-                    <CardHeader
-                      title={this.state.projData[0].name}
-                      subtitle={this.state.projData[0].description}
-                    />
-                    <CardText>
-                        Language: {this.state.projData[0].language}<br/>
-                        License:{this.state.projData[0].license}
-                    </CardText>
+            content = <div className="projectDetail">
+                        <Card className="projCard">
+                            <CardTitle
+                              title={this.state.projData[0].name}
+                              subtitle={this.state.projData[0].description}
+                            />
+                            <CardText>
+                                Language: {this.state.projData[0].language}<br/>
+                                License: {this.state.projData[0].license}
+                                <div style={{display: 'flex',flexWrap: 'wrap'}}>
+                                    {this.state.tagData.map(this.renderChip, this)}
+                                </div>
+                            </CardText>
 
-                </Card>
-            </div>;
+                        </Card>
+                    </div>;
             title = <h2>Project Detail</h2>;
         }
-
+        console.dir(this.state.tagData);
         return (
             <div>
                 <Nav/>
