@@ -1,0 +1,29 @@
+.project-image{
+	width: 30%;
+	float:left;
+}
+.project-desc{
+	height: 100%;
+	display: flex;
+	align-items: stretch;
+
+}
+.project-info{
+	float:right;
+	width: 70%;
+	min-width: 400px;
+	height: 200px;
+	margin-left:10px;
+	padding-left:10px;
+}
+
+.line-left{
+	border-left: solid black;
+}
+
+.projects-list{
+	max-width: 720px;
+	background-color:brown;
+	display: flex;
+	align-items: center;
+}
