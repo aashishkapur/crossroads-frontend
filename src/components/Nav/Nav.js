@@ -11,6 +11,9 @@ const style = {
     navText: {
         color: 'black',
         // fontFamily: 'anton'
+    },
+    input:{
+        float: 'right',
     }
 };
 
@@ -20,6 +23,7 @@ export default class Nav extends Component {
             <nav className="navbar navbar-default home-navbar" style={style.nav}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/" style={style.navText}>Crossroads</a>
+                    <input style={style.input}/>
                 </div>
 
             </nav>
