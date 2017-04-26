@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import Nav from "../Nav";
 import "./projects.css";
-// import RaisedButton from "material-ui/RaisedButton";
-import {Card, CardTitle, CardText} from 'material-ui/Card';
+import RaisedButton from "material-ui/RaisedButton";
+import {Card, CardTitle, CardText, CardHeader} from 'material-ui/Card';
 import Chip from 'material-ui/Chip';
 import axios from 'axios';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -22,7 +22,9 @@ export default class Projects extends Component {
     componentDidMount(){
         const self = this;
         // console.log("----------------------------");
-        // console.log(this.props.location.search.substr(3));
+        console.dir(this.props.location);
+
+        console.dir(this.props.location.search.substr(3));
         if(this.props.location.search.substr(3) === "")
         {
             axios.get("http://crossroads.web.engr.illinois.edu/api/projects/")
@@ -58,7 +60,7 @@ export default class Projects extends Component {
                     var arr1 = [];
                     for(var i = 0; i < response.data.tags.length;i++)
                     {
-                        console.log("\t===========name: " + response.data.tags[i]['name']);
+                        // console.log("\t===========name: " + response.data.tags[i]['name']);
                         arr1.push({
                                     'key': i,
                                     'label':response.data.tags[i]['name'],
@@ -113,6 +115,14 @@ export default class Projects extends Component {
     toProj = (rowNumber, columnNumber, evt) =>{
         window.location.href = "/projects?p=" + (rowNumber + 1);
     };
+    toGraph = (e) => {
+        e.preventDefault();
+        window.location.href = "/graph.html#" + this.state.projData[0].id;
+    };
+    editProject = (e) => {
+        e.preventDefault();
+        window.location.href = "/submitProject";
+    };
 
 
 
@@ -138,16 +148,19 @@ export default class Projects extends Component {
                         </Table>;
 
         let title = <h2>Projects</h2>;
+        let button = <div></div>;
         if(this.state.individual)
         {
             console.log("disp indiv");
-            console.dir(this.state.projData[0].name);
+            // console.dir(this.state.projData[0].name);
             content = <div className="projectDetail">
                         <Card className="projCard">
+                            <CardHeader>
                             <CardTitle
-                              title={this.state.projData[0].name}
+                              title={this.state.projData[0].name }
                               subtitle={this.state.projData[0].description}
                             />
+                            </CardHeader>
                             <CardText>
                                 Language: {this.state.projData[0].language}<br/>
                                 License: {this.state.projData[0].license}
@@ -155,12 +168,16 @@ export default class Projects extends Component {
                                     {this.state.tagData.map(this.renderChip, this)}
                                 </div>
                             </CardText>
-
                         </Card>
-                    </div>;
-            title = <h2>Project Detail</h2>;
+                        </div>;
+            title = <div><h2>Project Detail</h2> </div>;
+
+            button =    <div class="row-proj" style={{'marginTop':'1em'}}>
+                           <RaisedButton stype={{'marginLeft':'.5em'}}primary={true} label="Edit Project"/>
+                           <RaisedButton primary={true} label="View Graph" onClick={this.toGraph}/>
+                        </div>;
+
         }
-        // console.dir(this.state.tagData);
         return (
             <div>
                 <Nav/>
@@ -168,6 +185,7 @@ export default class Projects extends Component {
                     {title}
                     <div className="projects-list">
                         {content}
+                        {button}
                     </div>
                 </div>
             </div>

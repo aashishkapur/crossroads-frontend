@@ -5,6 +5,7 @@ import Login from "./components/Login"
 import Account from "./components/Account"
 import Projects from "./components/Projects"
 import MakeProject from "./components/MakeProject"
+import EditProject from "./components/EditProject"
 
 
 export default class App extends Component {
@@ -13,13 +14,20 @@ export default class App extends Component {
             <Router>
                 <div>
                     <Route exact path="/" component={Home}/>
-                    <Route path="/login" component={Login}/>
+                    <Route path="/login" component={() => (<Login/>)}/>
                     <Route path="/projects" component={Projects}/>
-                    <Route path="/account" component={Account}/>
-                    <Route path="/submitProject" component={MakeProject}/>
+                    <Route path="/account" component={() => (<Account/>)}/>
+                    <Route path="/submitProject" component={() => (<MakeProject/>)}/>
+                    <Route path="/editProject" component={EditProject}/>
 
                 </div>
             </Router>
         );
     }
 }
+
+                    // <Route exact path="/" component={Home}/>
+                    // <Route path="/login" component={Login}/>
+                    // <Route path="/projects" component={Projects}/>
+                    // <Route path="/account" component={Account}/>
+                    // <Route path="/submitProject" component={MakeProject}/>

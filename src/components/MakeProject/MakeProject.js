@@ -37,8 +37,6 @@ export default class MakeProject extends Component {
     submitProject(e){
         console.log("email: " + this.state.email + "\t password: " + this.state.password);
         e.preventDefault();
-        // const self = this;
-
         axios.put('http://crossroads.web.engr.illinois.edu/api/project/', 
           {
             repositoryURL:this.state.repositoryURL,
@@ -52,7 +50,6 @@ export default class MakeProject extends Component {
           })
           .then(function (response) {
             console.log(response.data.id);
-            alert(response.data.id);
             window.location.href = "/projects?p=" + response.data.id;
           })
           .catch(function (error) {
@@ -114,10 +111,6 @@ export default class MakeProject extends Component {
                               onChange={this.handleChange.bind(this, 'creationDate')}
                             />
                             <br />
-
-
-
-
 
                             <RaisedButton label="Submit!" primary={true} onClick={this.submitProject} style={{width:'100%'}}/>
                         </CardText>

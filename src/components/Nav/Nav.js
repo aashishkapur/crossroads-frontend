@@ -36,7 +36,9 @@ export default class Nav extends Component {
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/" style={style.navText}>Crossroads</a>
                     <a className="navbar-brand" href="/projects" style={style.navLink}>Projects</a>
-                    <input  style={style.input}/>
+                    <a className="navbar-brand" href="/graph.html" style={style.navLink}>Graphs</a>
+
+                    <input style={style.input}/>
                 </div>
 
             </nav>

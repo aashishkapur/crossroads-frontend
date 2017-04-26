@@ -42,9 +42,14 @@
 		display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 
 }
 
 .projCard{
 	width: 85%;
+}
+
+.row-proj{
+	flex-direction: row;
 }
